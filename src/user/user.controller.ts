@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
-import { CreateUserDTO } from './dto/create.user.dto';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 import { DeleteResult } from 'typeorm';
-import { UpdateUserDTO } from './dto/update.user.dto';
 
 @Controller('user')
 export class UserController {

@@ -33,3 +33,13 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Compressed files
+*.zip
+*.apk
+*.rar
+*.7z
+*.tar
+
+# dotenv environment variables file
+*.env

@@ -1,10 +1,21 @@
 {
-    "type": "mariadb",
-    "host": "192.168.10.101",
-    "port": 3306,
-    "username": "root",
-    "password": "1234",
-    "database": "temp",
-    "entities": ["dist/**/*.entity{.ts,.js}"],
-    "synchronize": true
-  }
+  "type": "mariadb",
+  "host": "220.118.89.104",
+  "port": 3306,
+  "username": "root",
+  "password": "1234",
+  "database": "metafleek",
+  "entities": [
+    "dist/**/*.entity{.ts,.js}"
+  ],
+  "synchronize": true,
+  "logging": true,
+  "migrationsTableName": "migrations",
+  "migrations": [
+    "src/migration/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "src/migration"
+  },
+  "ssl": false
+}

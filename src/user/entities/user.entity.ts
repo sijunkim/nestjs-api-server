@@ -3,17 +3,17 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity()
 export class User {
   @PrimaryColumn()
-  userId: string;
+  id: string;
 
-  @Column()
-  userName: string;
+  @Column({ length: 30 })
+  name: string;
 
-  @Column()
-  userPassword: string;
+  @Column({ length: 60 })
+  email: string;
 
-  @Column()
-  age: number;
+  @Column({ length: 30 })
+  password: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ length: 60 })
+  signupVerifyToken: string;
 }

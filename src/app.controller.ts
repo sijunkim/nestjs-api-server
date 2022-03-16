@@ -1,9 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { AuthGuard } from './app.guard';
 
+@UseGuards(AuthGuard)
 @Controller('')
 export class AppController {
   @Get()
   home() {
-    return 'Welcome to my Movie API';
+    return process.env.PORT;
   }
 }
