@@ -16,4 +16,10 @@ export class User {
 
   @Column({ length: 60 })
   signupVerifyToken: string;
+
+  @Column({ length: 20, nullable: true })
+  address: string;
+
+  @Column({ default: 0 })
+  age: number;
 }
