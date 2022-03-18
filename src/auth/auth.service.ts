@@ -22,7 +22,7 @@ export class AuthService {
       expiresIn: '1d',
       audience: 'example.com',
       issuer: 'example.com',
-    });
+    }); 
   }
 
   verify(jwtString: string) {

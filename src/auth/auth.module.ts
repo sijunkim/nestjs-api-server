@@ -7,3 +7,4 @@ import { AuthService } from './auth.service';
   providers: [AuthService]
 })
 export class AuthModule {}
+  

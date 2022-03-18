@@ -36,4 +36,11 @@ export class CreateUserDTO {
   @IsString()
   @Matches(/^[A-Za-z\d!@#$%^&*()]{8,30}$/)
   readonly password: string;
+
+  @IsString()
+  @MaxLength(20)
+  address: string;
+
+  @IsNumber()
+  age: number;
 }

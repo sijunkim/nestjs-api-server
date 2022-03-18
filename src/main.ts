@@ -47,5 +47,4 @@ async function makeOrmConfig() {
   fs.writeFileSync('ormconfig.json', JSON.stringify(typeormConfig, null, 2));
 }
 
-
 bootstrap();

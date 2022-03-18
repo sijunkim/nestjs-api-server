@@ -85,11 +85,17 @@ export class UserService {
 
   async putUser(updateUserDTO: UpdateUserDTO): Promise<User> {
     const user = await this.userRepository.findOne({ id: updateUserDTO.id });
-    // user.id = updateUserDTO.id;
-    user.email = updateUserDTO.email;
-    user.name = updateUserDTO.name;
-    // user.password = updateUserDTO.password;
-    // user.signupVerifyToken = updateUserDTO.signupVerifyToken;
+
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다');
+    }
+    else
+    {
+      user.name = updateUserDTO.name;
+      user.email = updateUserDTO.email;
+      user.address = updateUserDTO.address;
+      user.age = updateUserDTO.age;
+    }
 
     return await this.userRepository.save(user);
   }
@@ -111,25 +117,19 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
     }
-
-    return this.authService.login({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    else
+    {
+      return this.authService.login({ id: user.id, name: user.name, email: user.email });
+    }
   }
 
   async login(email: string, password: string): Promise<string> {
     const user = await this.userRepository.findOne({ email: email, password: password });
 
     if (!user) {
-      throw new NotFoundException('유저가 존재하지 않습니다');
+      throw new NotFoundException('일치하는 회원 정보가 없습니다.');
     }
 
-    return this.authService.login({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+    return this.authService.login({ id: user.id, name: user.name, email: user.email });
   }
 }

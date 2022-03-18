@@ -66,7 +66,6 @@ export class UserController {
 
   @Post('/login')
   async login(@Body() userLoginDTO: UserLoginDTO) {
-    console.log(userLoginDTO);
     const { email, password } = userLoginDTO;
     return await this.userService.login(email, password);
   }

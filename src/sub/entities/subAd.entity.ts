@@ -14,21 +14,21 @@ export class SubAd {
   subAd_price: number;
   @Column()
   subAd_quntity: number;
-  // @Column()
-  // subAd_APdt: Date;
-  // @Column()
-  // subAd_DDdt: Date;
-  // @Column()
-  // sub_stat_cd: string;
-  // @Column()
-  // subAd_type: string;
+  @Column()
+  subAd_APdt: Date;
+  @Column()
+  subAd_DDdt: Date;
+  @Column()
+  sub_stat_cd: string;
+  @Column()
+  subAd_type: string;
 
-  // @Column()
-  // reg_id: string;
-  // @Column()
-  // reg_dt: Date;
-  // @Column()
-  // edit_id: string;
-  // @Column()
-  // edit_dt: Date;
+  @Column()
+  reg_id: string;
+  @Column()
+  reg_dt: Date;
+  @Column()
+  edit_id: string;
+  @Column()
+  edit_dt: Date;
 }
