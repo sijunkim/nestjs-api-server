@@ -19,7 +19,7 @@ export class UserService {
     private connection: Connection,
   ) {}
 
-  async getUser(id: string): Promise<User> {
+  async getUser(id: string) {
     const user = await this.userRepository.findOne({ id: id });
 
     if (!user) {
@@ -29,7 +29,7 @@ export class UserService {
     return user;
   }
 
-  async findAll(): Promise<User[]> {
+  async findAll() {
     return await this.userRepository.find();
   }
 
@@ -83,7 +83,7 @@ export class UserService {
     }
   }
 
-  async putUser(updateUserDTO: UpdateUserDTO): Promise<User> {
+  async putUser(updateUserDTO: UpdateUserDTO) {
     const user = await this.userRepository.findOne({ id: updateUserDTO.id });
 
     if (!user) {
@@ -100,7 +100,7 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async deleteUser(id: string): Promise<DeleteResult> {
+  async deleteUser(id: string) {
     return await this.userRepository.delete({ id: id });
   }
 
@@ -111,7 +111,7 @@ export class UserService {
     return user !== undefined;
   }
 
-  async verifyEmail(signupVerifyToken: string): Promise<string> {
+  async verifyEmail(signupVerifyToken: string) {
     const user = await this.userRepository.findOne({ signupVerifyToken: signupVerifyToken });
 
     if (!user) {
@@ -123,7 +123,7 @@ export class UserService {
     }
   }
 
-  async login(email: string, password: string): Promise<string> {
+  async login(email: string, password: string) {
     const user = await this.userRepository.findOne({ email: email, password: password });
 
     if (!user) {

@@ -30,10 +30,7 @@ export class UserController {
   }
 
   @Get('/:id')
-  async getUser(
-    @Headers() headers: any,
-    @Param('id') id: string,
-  ): Promise<User> {
+  async getUser(@Headers() headers: any, @Param('id') id: string) {
     const jwtString = headers.authorization.split('Bearer ')[1];
 
     this.authService.verify(jwtString);
@@ -47,20 +44,17 @@ export class UserController {
   }
 
   @Put('/update')
-  async putUser(@Body() updateUserDTO: UpdateUserDTO): Promise<User> {
+  async putUser(@Body() updateUserDTO: UpdateUserDTO) {
     return await this.userService.putUser(updateUserDTO);
   }
 
   @Delete('/delete/:id')
-  async deleteUser(@Param('id') id: string): Promise<DeleteResult> {
+  async deleteUser(@Param('id') id: string) {
     return await this.userService.deleteUser(id);
   }
 
   @Post('/email-verify')
-  async verifyEmail(
-    @Query('signupVerifyToken') signupVerifyToken: string,
-    // @Query('temp') temp: string,
-  ): Promise<string> {
+  async verifyEmail(@Query('signupVerifyToken') signupVerifyToken: string) {
     return await this.userService.verifyEmail(signupVerifyToken);
   }
 
