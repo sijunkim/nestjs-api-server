@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Photo } from 'src/photo/entities/photo.entity';
 
 @Entity()
 export class User {
@@ -22,4 +23,7 @@ export class User {
 
   @Column({ default: 0 })
   age: number;
+
+  @OneToMany(() => Photo, (photo) => photo.user)
+  photos: Photo[]
 }
