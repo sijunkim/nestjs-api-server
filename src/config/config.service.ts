@@ -3,8 +3,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 require('dotenv').config();
 
 export class ConfigService {
-
-  constructor(private env: { [k: string]: string | undefined }) { }
+  constructor(private env: { [k: string]: string | undefined }) {}
 
   private getValue(key: string, throwOnMissing = true): string {
     const value = this.env[key];
@@ -16,7 +15,7 @@ export class ConfigService {
   }
 
   isDevelopment() {
-    return this.getValue('NODE_ENV', false) === 'development';
+    return this.getValue('NODE_ENV', false) === 'local';
   }
 
   getTypeOrmConfig(): TypeOrmModuleOptions {
@@ -29,14 +28,13 @@ export class ConfigService {
       password: this.getValue('DATABASE_PASSWORD'),
       database: this.getValue('DATABASE_NAME'),
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: Boolean(this.getValue('DATABASE_SYNCHRONIZE')),
-      logging: Boolean(this.getValue('DATABASE_LOGGING')),
+      // synchronize: Boolean(this.getValue('DATABASE_SYNCHRONIZE')),
+      // logging: Boolean(this.getValue('DATABASE_LOGGING')),
       migrationsTableName: 'migrations',
       migrations: ['src/migration/*.ts'],
       cli: {
         migrationsDir: 'src/migration',
       },
-      ssl: !this.isDevelopment(),
     };
   }
 }

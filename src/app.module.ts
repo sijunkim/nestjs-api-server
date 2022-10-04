@@ -15,7 +15,7 @@ import { AuthGuard } from './app.guard';
 import { PhotoModule } from './photo/photo.module';
 
 const configModule = ConfigModule.forRoot({
-  envFilePath: [`${__dirname}/config/env/.${process.env.NODE_ENV}.env`],
+  envFilePath: `.env`,
   load: [emailConfig, authConfig],
   isGlobal: true,
   validationSchema,
