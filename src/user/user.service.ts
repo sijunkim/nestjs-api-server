@@ -38,14 +38,26 @@ export class UserService {
     if (!isExists) {
       const signupVerifyToken = uuid.v1();
 
-      await this.saveUser(createUserDTO, signupVerifyToken);
+      const result = await this.sendMemberJoinEmail(
+        createUserDTO.email,
+        signupVerifyToken,
+      );
+      if (
+        result != null &&
+        result.accepted !== undefined &&
+        result.accepted.includes(createUserDTO.email)
+      ) {
+        await this.saveUser(createUserDTO, signupVerifyToken);
 
-      await this.sendMemberJoinEmail(createUserDTO.email, signupVerifyToken);
+        return createUserDTO;
+      } else {
+        return 'fail';
+      }
     }
   }
 
   async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
-    await this.emailService.sendMemberJoinVerification(
+    return await this.emailService.sendMemberJoinVerification(
       email,
       signupVerifyToken,
     );
@@ -88,9 +100,7 @@ export class UserService {
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
-    }
-    else
-    {
+    } else {
       user.name = updateUserDTO.name;
       user.email = updateUserDTO.email;
       user.address = updateUserDTO.address;
@@ -112,24 +122,35 @@ export class UserService {
   }
 
   async verifyEmail(signupVerifyToken: string) {
-    const user = await this.userRepository.findOne({ signupVerifyToken: signupVerifyToken });
+    const user = await this.userRepository.findOne({
+      signupVerifyToken: signupVerifyToken,
+    });
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
-    }
-    else
-    {
-      return this.authService.login({ id: user.id, name: user.name, email: user.email });
+    } else {
+      return this.authService.login({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      });
     }
   }
 
   async login(email: string, password: string) {
-    const user = await this.userRepository.findOne({ email: email, password: password });
+    const user = await this.userRepository.findOne({
+      email: email,
+      password: password,
+    });
 
     if (!user) {
       throw new NotFoundException('일치하는 회원 정보가 없습니다.');
     }
 
-    return this.authService.login({ id: user.id, name: user.name, email: user.email });
+    return this.authService.login({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    });
   }
 }

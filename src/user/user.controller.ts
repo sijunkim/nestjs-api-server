@@ -33,14 +33,12 @@ export class UserController {
   async getUser(@Headers() headers: any, @Param('id') id: string) {
     const jwtString = headers.authorization.split('Bearer ')[1];
 
-    this.authService.verify(jwtString);
-
-    return this.userService.getUser(id);
+    return this.authService.verify(jwtString);
   }
 
   @Post('/create')
   async createUser(@Body() createUserDTO: CreateUserDTO) {
-    this.userService.createUser(createUserDTO);
+    return await this.userService.createUser(createUserDTO);
   }
 
   @Put('/update')
@@ -53,9 +51,9 @@ export class UserController {
     return await this.userService.deleteUser(id);
   }
 
-  @Post('/email-verify')
-  async verifyEmail(@Query('signupVerifyToken') signupVerifyToken: string) {
-    return await this.userService.verifyEmail(signupVerifyToken);
+  @Get('/email-verify/:token')
+  async verifyEmail(@Param('token') token: string) {
+    return await this.userService.verifyEmail(token);
   }
 
   @Post('/login')
