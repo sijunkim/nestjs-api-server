@@ -24,7 +24,7 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
-  @Get()
+  @Get('/')
   async getUsers() {
     return await this.userService.findAll();
   }
@@ -58,7 +58,7 @@ export class UserController {
 
   @Post('/login')
   async login(@Body() userLoginDTO: UserLoginDTO) {
-    const { email, password } = userLoginDTO;
-    return await this.userService.login(email, password);
+    const { id, password } = userLoginDTO;
+    return await this.userService.login(id, password);
   }
 }

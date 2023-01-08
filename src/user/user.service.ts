@@ -38,15 +38,8 @@ export class UserService {
     if (!isExists) {
       const signupVerifyToken = uuid.v1();
 
-      const result = await this.sendMemberJoinEmail(
-        createUserDTO.email,
-        signupVerifyToken,
-      );
-      if (
-        result != null &&
-        result.accepted !== undefined &&
-        result.accepted.includes(createUserDTO.email)
-      ) {
+      const result = await this.sendMemberJoinEmail(createUserDTO.email, signupVerifyToken);
+      if (result != null && result.accepted !== undefined && result.accepted.includes(createUserDTO.email)) {
         await this.saveUser(createUserDTO, signupVerifyToken);
 
         return createUserDTO;
@@ -57,10 +50,7 @@ export class UserService {
   }
 
   async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
-    return await this.emailService.sendMemberJoinVerification(
-      email,
-      signupVerifyToken,
-    );
+    return await this.emailService.sendMemberJoinVerification(email, signupVerifyToken);
   }
 
   async saveUser(createUserDTO: CreateUserDTO, signupVerifyToken: string) {
@@ -137,9 +127,9 @@ export class UserService {
     }
   }
 
-  async login(email: string, password: string) {
+  async login(id: string, password: string) {
     const user = await this.userRepository.findOne({
-      email: email,
+      id: id,
       password: password,
     });
 

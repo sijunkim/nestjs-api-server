@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, IsNull, OneToMany, PrimaryColumn } from 'typeorm';
 import { Photo } from 'src/photo/entities/photo.entity';
 
 @Entity()
@@ -25,5 +25,5 @@ export class User {
   age: number;
 
   @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[]
+  photos: Photo[];
 }

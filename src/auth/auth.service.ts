@@ -11,27 +11,21 @@ interface User {
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @Inject(authConfig.KEY) private config: ConfigType<typeof authConfig>,
-  ) {}
+  constructor(@Inject(authConfig.KEY) private config: ConfigType<typeof authConfig>) {}
 
   login(user: User) {
     const payload = { ...user };
 
     return jwt.sign(payload, this.config.jwtSecret, {
-      expiresIn: '1d',
+      expiresIn: '30d',
       audience: 'example.com',
       issuer: 'example.com',
-    }); 
+    });
   }
 
   verify(jwtString: string) {
     try {
-      const payload = jwt.verify(jwtString, this.config.jwtSecret) as (
-        | jwt.JwtPayload
-        | string
-      ) &
-        User;
+      const payload = jwt.verify(jwtString, this.config.jwtSecret) as (jwt.JwtPayload | string) & User;
 
       const { id, email } = payload;
 
