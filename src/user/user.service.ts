@@ -37,10 +37,18 @@ export class UserService {
     const isExists = await this.checkUserExists(createUserDTO);
     if (!isExists) {
       const signupVerifyToken = uuid.v1();
-
-      const result = await this.sendMemberJoinEmail(createUserDTO.email, signupVerifyToken);
+      const result = await this.emailService.sendMemberJoinVerification(createUserDTO.email, signupVerifyToken);
       if (result != null && result.accepted !== undefined && result.accepted.includes(createUserDTO.email)) {
-        await this.saveUser(createUserDTO, signupVerifyToken);
+        const user: User = {
+          id: createUserDTO.id,
+          name: createUserDTO.name,
+          email: createUserDTO.email,
+          password: createUserDTO.password,
+          signupVerifyToken: signupVerifyToken,
+          photos: [],
+        };
+
+        await this.saveUser(user);
 
         return createUserDTO;
       } else {
@@ -49,19 +57,8 @@ export class UserService {
     }
   }
 
-  async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
-    return await this.emailService.sendMemberJoinVerification(email, signupVerifyToken);
-  }
-
-  async saveUser(createUserDTO: CreateUserDTO, signupVerifyToken: string) {
-    const user = new User();
-    user.email = createUserDTO.email;
-    user.id = createUserDTO.id;
-    user.name = createUserDTO.name;
-    user.password = createUserDTO.password;
-    user.signupVerifyToken = signupVerifyToken;
-
-    return await this.saveUserUsingQueryRunner(user);
+  async saveUser(user: User) {
+    await this.saveUserUsingQueryRunner(user);
   }
 
   async saveUserUsingQueryRunner(user: User) {

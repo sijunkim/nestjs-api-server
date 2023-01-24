@@ -19,10 +19,10 @@ export class User {
   signupVerifyToken: string;
 
   @Column({ length: 20, nullable: true })
-  address: string;
+  address?: string;
 
   @Column({ default: 0 })
-  age: number;
+  age?: number;
 
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
