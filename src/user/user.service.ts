@@ -39,14 +39,12 @@ export class UserService {
       const signupVerifyToken = uuid.v1();
       const result = await this.emailService.sendMemberJoinVerification(createUserDTO.email, signupVerifyToken);
       if (result != null && result.accepted !== undefined && result.accepted.includes(createUserDTO.email)) {
-        const user: User = {
-          id: createUserDTO.id,
-          name: createUserDTO.name,
-          email: createUserDTO.email,
-          password: createUserDTO.password,
-          signupVerifyToken: signupVerifyToken,
-          photos: [],
-        };
+        const user: User = new User();
+        user.id = createUserDTO.id;
+        user.name = createUserDTO.name;
+        user.email = createUserDTO.email;
+        user.password = createUserDTO.password;
+        user.signupVerifyToken = signupVerifyToken;
 
         await this.saveUser(user);
 

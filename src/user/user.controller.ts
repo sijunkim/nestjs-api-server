@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Headers,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Param, Post, Put, Query } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -19,10 +9,7 @@ import { AuthService } from 'src/auth/auth.service';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly userService: UserService, private readonly authService: AuthService) {}
 
   @Get('/')
   async getUsers() {
@@ -51,9 +38,9 @@ export class UserController {
     return await this.userService.deleteUser(id);
   }
 
-  @Get('/email-verify/:token')
-  async verifyEmail(@Param('token') token: string) {
-    return await this.userService.verifyEmail(token);
+  @Post('/email-verify')
+  async verifyEmail(@Body() signupVerifyToken: string) {
+    return await this.userService.verifyEmail(signupVerifyToken);
   }
 
   @Post('/login')

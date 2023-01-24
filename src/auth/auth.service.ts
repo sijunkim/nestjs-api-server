@@ -13,10 +13,14 @@ interface User {
 export class AuthService {
   constructor(@Inject(authConfig.KEY) private config: ConfigType<typeof authConfig>) {}
 
+  sign(payload: string | Buffer | object, secretOrPrivateKey: jwt.Secret, options?: jwt.SignOptions): string {
+    return jwt.sign(payload, secretOrPrivateKey, options);
+  }
+
   login(user: User) {
     const payload = { ...user };
 
-    return jwt.sign(payload, this.config.jwtSecret, {
+    return this.sign(payload, this.config.jwtSecret, {
       expiresIn: '30d',
       audience: 'example.com',
       issuer: 'example.com',
