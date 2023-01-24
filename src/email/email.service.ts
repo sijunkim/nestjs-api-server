@@ -20,13 +20,14 @@ export class EmailService {
   }
 
   async sendMemberJoinVerification(emailAddress: string, signupVerifyToken: string) {
-    const url = `${this.emailConfig.baseUrl}/user/email-verify?signupVerifyToken=${signupVerifyToken}`;
+    const url = `${this.emailConfig.baseUrl}/user/email-verify`;
     const mailOptions: EmailOptions = {
       to: emailAddress,
       subject: '가입 인증 메일',
       html: `
         가입확인 버튼를 누르시면 가입 인증이 완료됩니다.<br/>
-        <form action="${url}" method="POST">
+        <form action="${url}" method="POST" target="_blank">
+          <input type="text" name="signupVerifyToken" value="${signupVerifyToken}" hidden />
           <button>가입확인</button>
         </form>
       `,
