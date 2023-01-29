@@ -107,9 +107,7 @@ export class UserService {
   }
 
   async verifyEmail(signupVerifyToken: string) {
-    const user = await this.userRepository.findOne({
-      signupVerifyToken: signupVerifyToken,
-    });
+    const user = await this.userRepository.findOne(signupVerifyToken);
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
