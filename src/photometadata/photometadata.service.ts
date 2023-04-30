@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePhotometadatumDto } from './dto/create-photometadatum.dto';
-import { UpdatePhotometadatumDto } from './dto/update-photometadatum.dto';
+import { CreatePhotometadataDto } from './dto/create-photometadata.dto';
+import { UpdatePhotometadataDto } from './dto/update-photometadata.dto';
 
 @Injectable()
 export class PhotometadataService {
-  create(createPhotometadatumDto: CreatePhotometadatumDto) {
+  create(createPhotometadatumDto: CreatePhotometadataDto) {
     return 'This action adds a new photometadatum';
   }
 
@@ -16,7 +16,7 @@ export class PhotometadataService {
     return `This action returns a #${id} photometadatum`;
   }
 
-  update(id: number, updatePhotometadatumDto: UpdatePhotometadatumDto) {
+  update(id: number, updatePhotometadatumDto: UpdatePhotometadataDto) {
     return `This action updates a #${id} photometadatum`;
   }
 

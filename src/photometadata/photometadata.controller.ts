@@ -1,15 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PhotometadataService } from './photometadata.service';
-import { CreatePhotometadatumDto } from './dto/create-photometadatum.dto';
-import { UpdatePhotometadatumDto } from './dto/update-photometadatum.dto';
+import { CreatePhotometadataDto } from './dto/create-photometadata.dto';
+import { UpdatePhotometadataDto } from './dto/update-photometadata.dto';
 
 @Controller('photometadata')
 export class PhotometadataController {
   constructor(private readonly photometadataService: PhotometadataService) {}
 
   @Post()
-  create(@Body() createPhotometadatumDto: CreatePhotometadatumDto) {
-    return this.photometadataService.create(createPhotometadatumDto);
+  create(@Body() createPhotometadataDto: CreatePhotometadataDto) {
+    return this.photometadataService.create(createPhotometadataDto);
   }
 
   @Get()
@@ -23,8 +23,8 @@ export class PhotometadataController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePhotometadatumDto: UpdatePhotometadatumDto) {
-    return this.photometadataService.update(+id, updatePhotometadatumDto);
+  update(@Param('id') id: string, @Body() updatePhotometadataDto: UpdatePhotometadataDto) {
+    return this.photometadataService.update(+id, updatePhotometadataDto);
   }
 
   @Delete(':id')
