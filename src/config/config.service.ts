@@ -20,15 +20,14 @@ export class ConfigService {
 
   getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
-      type: 'mariadb',
-
+      type: 'mysql',
       host: this.getValue('DATABASE_HOST'),
       port: parseInt(this.getValue('DATABASE_PORT')),
       username: this.getValue('DATABASE_USERNAME'),
       password: this.getValue('DATABASE_PASSWORD'),
       database: this.getValue('DATABASE_NAME'),
       entities: ['dist/**/*.entity{.ts,.js}'],
-      // synchronize: Boolean(this.getValue('DATABASE_SYNCHRONIZE')),
+      synchronize: Boolean(this.getValue('DATABASE_SYNCHRONIZE')),
       // logging: Boolean(this.getValue('DATABASE_LOGGING')),
       migrationsTableName: 'migrations',
       migrations: ['src/migration/*.ts'],

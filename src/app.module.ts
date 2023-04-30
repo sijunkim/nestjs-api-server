@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './app.guard';
 import { PhotoModule } from './photo/photo.module';
+import { PhotometadataModule } from './photometadata/photometadata.module';
 
 const configModule = ConfigModule.forRoot({
   envFilePath: `.env`,
@@ -22,14 +23,7 @@ const configModule = ConfigModule.forRoot({
 });
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(),
-    configModule,
-    UserModule,
-    EmailModule,
-    AuthModule,
-    PhotoModule,
-  ],
+  imports: [TypeOrmModule.forRoot(), configModule, UserModule, EmailModule, AuthModule, PhotoModule, PhotometadataModule],
   controllers: [AppController],
   providers: [
     {

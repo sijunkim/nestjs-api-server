@@ -10,13 +10,7 @@ import { AuthGuard } from './app.guard';
 // import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 dotenv.config({
-  path: path.resolve(
-    process.env.NODE_ENV === 'production'
-      ? '.production.env'
-      : process.env.NODE_ENV === 'stage'
-      ? '.stage.env'
-      : '.env',
-  ),
+  path: path.resolve('.env'),
 });
 
 async function bootstrap() {
