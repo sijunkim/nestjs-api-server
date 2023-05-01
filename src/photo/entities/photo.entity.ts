@@ -27,6 +27,6 @@ export class Photo {
   @ManyToOne(() => User, (user) => user.photos)
   user: User;
 
-  @OneToOne(() => PhotoMetadata, (photometadata) => photometadata.photo)
-  photo: Photo;
+  @OneToOne(() => PhotoMetadata, (photoMetadata) => photoMetadata.photo)
+  photoMetadata: PhotoMetadata;
 }
