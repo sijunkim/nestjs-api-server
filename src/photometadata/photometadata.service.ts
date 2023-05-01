@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePhotometadataDto } from './dto/create-photometadata.dto';
 import { UpdatePhotometadataDto } from './dto/update-photometadata.dto';
+import { PhotoMetadataRepository } from './entities/photometadata.repository';
 
 @Injectable()
-export class PhotometadataService {
+export class PhotoMetadataService {
+  constructor(private photoMetadataRepository: PhotoMetadataRepository) {}
+
   create(createPhotometadatumDto: CreatePhotometadataDto) {
     return 'This action adds a new photometadatum';
   }

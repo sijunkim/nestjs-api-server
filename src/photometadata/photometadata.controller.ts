@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PhotometadataService } from './photometadata.service';
+import { PhotoMetadataService } from './photometadata.service';
 import { CreatePhotometadataDto } from './dto/create-photometadata.dto';
 import { UpdatePhotometadataDto } from './dto/update-photometadata.dto';
 
 @Controller('photometadata')
 export class PhotometadataController {
-  constructor(private readonly photometadataService: PhotometadataService) {}
+  constructor(private readonly photometadataService: PhotoMetadataService) {}
 
   @Post()
   create(@Body() createPhotometadataDto: CreatePhotometadataDto) {
