@@ -4,7 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn
 
 @Entity()
 export class Photo {
-  @PrimaryGeneratedColumn({ name: 'photo_id', type: 'int' })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({

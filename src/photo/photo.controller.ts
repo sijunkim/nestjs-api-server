@@ -17,8 +17,13 @@ export class PhotoController {
     return await this.photoService.createPhoto(CreateRequestPhotoDto);
   }
 
-  // @Get('/:id')
-  // async getPhoto(@Param('id') id: number): Photo {
-  //   return await this.photoService.getPhoto(id);
-  // }
+  @Get('/:id')
+  async getPhoto(@Param('id') id: number) {
+    return await this.photoService.getPhoto(id);
+  }
+
+  @Get('/')
+  async getAllPhoto() {
+    return await this.photoService.getAllPhoto();
+  }
 }

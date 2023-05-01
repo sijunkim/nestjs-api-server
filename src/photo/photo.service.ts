@@ -36,6 +36,12 @@ export class PhotoService {
   async createPhoto(createRequestPhotoDto: CreateRequestPhotoDto) {}
 
   async getPhoto(id: number) {
-    return this.photoRepository.find({ id: id });
+    return await this.photoRepository.findOne(id);
+  }
+
+  async getAllPhoto() {
+    return await this.photoRepository.find({
+      relations: ['photoMetadata'],
+    });
   }
 }
