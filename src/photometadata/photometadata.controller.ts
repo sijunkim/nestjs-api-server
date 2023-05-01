@@ -18,8 +18,8 @@ export class PhotometadataController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.photometadataService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.photometadataService.findOne(id);
   }
 
   @Patch(':id')

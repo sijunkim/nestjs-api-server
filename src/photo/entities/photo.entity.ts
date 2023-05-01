@@ -1,10 +1,10 @@
 import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Photo {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'photo_id', type: 'int' })
   id: number;
 
   @Column({
@@ -24,9 +24,17 @@ export class Photo {
   @Column()
   isPublished: boolean;
 
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
   @ManyToOne(() => User, (user) => user.photos)
   user: User;
 
-  @OneToOne(() => PhotoMetadata, (photoMetadata) => photoMetadata.photo)
+  @OneToOne((type) => PhotoMetadata, (metadata) => metadata.photo, {
+    cascade: true,
+  })
   photoMetadata: PhotoMetadata;
 }

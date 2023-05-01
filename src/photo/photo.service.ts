@@ -29,10 +29,8 @@ export class PhotoService {
     photoMetadata.orientation = 'portrait';
 
     photo.photoMetadata = photoMetadata;
-    photoMetadata.photo = photo;
 
     await this.photoRepository.save(photo);
-    await this.photoMetadataRepository.save(photoMetadata);
   }
 
   async createPhoto(createRequestPhotoDto: CreateRequestPhotoDto) {}

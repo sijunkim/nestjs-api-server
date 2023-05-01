@@ -15,8 +15,8 @@ export class PhotoMetadataService {
     return `This action returns all photometadata`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} photometadatum`;
+  async findOne(id: number) {
+    return await this.photoMetadataRepository.findOne(id);
   }
 
   update(id: number, updatePhotometadatumDto: UpdatePhotometadataDto) {

@@ -21,7 +21,13 @@ export class PhotoMetadata {
   @Column()
   comment: string;
 
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @OneToOne((type) => Photo, (photo) => photo.photoMetadata)
   @JoinColumn()
-  @OneToOne(() => Photo, (photo) => photo.photoMetadata)
   photo: Photo;
 }
