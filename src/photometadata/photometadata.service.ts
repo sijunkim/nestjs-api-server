@@ -21,7 +21,7 @@ export class PhotoMetadataService {
   }
 
   async findOne(id: number) {
-    return await this.photoMetadataRepository.findOne(id);
+    return await this.photoMetadataRepository.findOneBy({ id });
   }
 
   update(id: number, updatePhotometadatumDto: UpdatePhotometadataDto) {

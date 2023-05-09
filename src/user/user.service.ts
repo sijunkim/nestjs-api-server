@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async getUser(id: string) {
-    const user = await this.userRepository.findOne({ id: id });
+    const user = await this.userRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
@@ -87,7 +87,7 @@ export class UserService {
   }
 
   async putUser(updateUserDTO: UpdateUserDTO) {
-    const user = await this.userRepository.findOne({ id: updateUserDTO.id });
+    const user = await this.userRepository.findOneBy({ id: updateUserDTO.id });
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
@@ -106,14 +106,12 @@ export class UserService {
   }
 
   async checkUserExists(createUserDTO: CreateUserDTO) {
-    const user = await this.userRepository.findOne({
-      email: createUserDTO.email,
-    });
+    const user = await this.userRepository.findOneBy({ email: createUserDTO.email });
     return user !== undefined;
   }
 
   async verifyEmail(signupVerifyToken: string) {
-    const user = await this.userRepository.findOne(signupVerifyToken);
+    const user = await this.userRepository.findOneBy({ signupVerifyToken });
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
