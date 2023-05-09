@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRequestPhotoDto } from './dto/create-photo.dto';
 import { Photo } from './entities/photo.entity';
-import { PhotoRepository } from './entities/photo.repository';
 import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
-import { PhotoMetadataRepository } from 'src/photometadata/entities/photometadata.repository';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class PhotoService {
   constructor(
-    private photoRepository: PhotoRepository,
-    private photoMetadataRepository: PhotoMetadataRepository,
+    @InjectRepository(Photo)
+    private photoRepository: Repository<Photo>,
+    @InjectRepository(PhotoMetadata)
+    private photoMetadataRepository: Repository<PhotoMetadata>,
   ) {}
 
   async createDefaultPhoto() {

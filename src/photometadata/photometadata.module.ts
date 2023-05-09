@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { PhotoMetadataService } from './photometadata.service';
 import { PhotometadataController } from './photometadata.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PhotoMetadataRepository } from './entities/photometadata.repository';
+import { PhotoMetadata } from './entities/photometadata.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PhotoMetadataRepository])],
+  imports: [TypeOrmModule.forFeature([PhotoMetadata])],
   controllers: [PhotometadataController],
   providers: [PhotoMetadataService],
 })

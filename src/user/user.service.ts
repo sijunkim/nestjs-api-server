@@ -1,11 +1,10 @@
 import * as uuid from 'uuid';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, DeleteResult } from 'typeorm';
+import { Connection, DeleteResult, Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { UserRepository } from './entities/user.repository';
 import { EmailService } from 'src/email/email.service';
 import { AuthService } from 'src/auth/auth.service';
 
@@ -13,7 +12,7 @@ import { AuthService } from 'src/auth/auth.service';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: UserRepository,
+    private userRepository: Repository<User>,
     private emailService: EmailService,
     private authService: AuthService,
     private connection: Connection,
@@ -37,8 +36,15 @@ export class UserService {
     const isExists = await this.checkUserExists(createUserDTO);
     if (!isExists) {
       const signupVerifyToken = uuid.v1();
-      const result = await this.emailService.sendMemberJoinVerification(createUserDTO.email, signupVerifyToken);
-      if (result != null && result.accepted !== undefined && result.accepted.includes(createUserDTO.email)) {
+      const result = await this.emailService.sendMemberJoinVerification(
+        createUserDTO.email,
+        signupVerifyToken,
+      );
+      if (
+        result != null &&
+        result.accepted !== undefined &&
+        result.accepted.includes(createUserDTO.email)
+      ) {
         const user: User = new User();
         user.id = createUserDTO.id;
         user.name = createUserDTO.name;
