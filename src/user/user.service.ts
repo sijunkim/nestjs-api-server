@@ -125,10 +125,7 @@ export class UserService {
   }
 
   async login(id: string, password: string) {
-    const user = await this.userRepository.findOne({
-      id: id,
-      password: password,
-    });
+    const user = await this.userRepository.findOneBy({ id, password });
 
     if (!user) {
       throw new NotFoundException('일치하는 회원 정보가 없습니다.');
