@@ -31,9 +31,9 @@ export class ConfigService {
       // logging: Boolean(this.getValue('DATABASE_LOGGING')),
       migrationsTableName: 'migrations',
       migrations: ['src/migration/*.ts'],
-      cli: {
-        migrationsDir: 'src/migration',
-      },
+      // cli: {
+      //   migrationsDir: 'src/migration',
+      // },
     };
   }
 }
