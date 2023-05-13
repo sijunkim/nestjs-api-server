@@ -6,10 +6,14 @@ import { UserLoginDTO } from './dto/user-login.dto';
 import { DeleteResult } from 'typeorm';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { EmailVerifyDTO } from './dto/email-verify.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService, private readonly authService: AuthService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get('/')
   async getUsers() {
@@ -39,7 +43,8 @@ export class UserController {
   }
 
   @Post('/email-verify')
-  async verifyEmail(@Body() signupVerifyToken: string) {
+  async verifyEmail(@Body() emailVerifyDTO: EmailVerifyDTO) {
+    const { signupVerifyToken } = emailVerifyDTO;
     return await this.userService.verifyEmail(signupVerifyToken);
   }
 

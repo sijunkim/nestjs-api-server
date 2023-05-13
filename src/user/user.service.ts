@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, DeleteResult, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -15,7 +15,7 @@ export class UserService {
     private userRepository: Repository<User>,
     private emailService: EmailService,
     private authService: AuthService,
-    private connection: Connection,
+    private dataSource: DataSource,
   ) {}
 
   async getUser(id: string) {
@@ -34,7 +34,7 @@ export class UserService {
 
   async createUser(createUserDTO: CreateUserDTO) {
     const isExists = await this.checkUserExists(createUserDTO);
-    if (!isExists) {
+    if (isExists === false) {
       const signupVerifyToken = uuid.v1();
       const result = await this.emailService.sendMemberJoinVerification(
         createUserDTO.email,
@@ -66,7 +66,7 @@ export class UserService {
   }
 
   async saveUserUsingQueryRunner(user: User) {
-    const queryRunner = this.connection.createQueryRunner();
+    const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -107,7 +107,7 @@ export class UserService {
 
   async checkUserExists(createUserDTO: CreateUserDTO) {
     const user = await this.userRepository.findOneBy({ email: createUserDTO.email });
-    return user !== undefined;
+    return user !== null;
   }
 
   async verifyEmail(signupVerifyToken: string) {

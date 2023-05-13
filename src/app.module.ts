@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LoggerMiddleware } from './logger/logger.middleware';
 
-import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import emailConfig from 'src/config/emailConfig';
@@ -14,17 +13,43 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './app.guard';
 import { PhotoModule } from './photo/photo.module';
 import { PhotometadataModule } from './photometadata/photometadata.module';
+import { DataSource } from 'typeorm';
 
 const configModule = ConfigModule.forRoot({
-  envFilePath: `.env`,
   load: [emailConfig, authConfig],
   isGlobal: true,
   validationSchema,
 });
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), configModule, UserModule, EmailModule, AuthModule, PhotoModule, PhotometadataModule],
-  controllers: [AppController],
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'mysql',
+        host: process.env.DATABASE_HOST,
+        port: 3306,
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
+        migrationsTableName: 'migrations',
+        migrations: ['src/migration/*.ts'],
+      }),
+
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options).initialize();
+        return dataSource;
+      },
+    }),
+    configModule,
+    UserModule,
+    AuthModule,
+    EmailModule,
+    PhotoModule,
+    PhotometadataModule,
+  ],
+  controllers: [],
   providers: [
     {
       provide: APP_GUARD,
@@ -34,6 +59,6 @@ const configModule = ConfigModule.forRoot({
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
-    //consumer.apply(LoggerMiddleware).forRoutes('/user');
+    consumer.apply(LoggerMiddleware).forRoutes('/user');
   }
 }
