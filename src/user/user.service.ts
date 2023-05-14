@@ -23,7 +23,26 @@ export class UserService {
   ) {}
 
   async getUser(id: string) {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.find({
+      select: {
+        id: true,
+        photos: {
+          name: true,
+          description: true,
+          photoMetadata: {},
+        },
+      },
+      where: {
+        photos: {
+          id: 9,
+        },
+      },
+      relations: {
+        photos: {
+          photoMetadata: true,
+        },
+      },
+    });
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');

@@ -36,8 +36,10 @@ export class UserController {
   @Get('/:id')
   async getUser(@Headers() headers: any, @Param('id') id: string) {
     const jwtString = headers.authorization.split('Bearer ')[1];
-
-    return this.authService.verify(jwtString);
+    const verified = this.authService.verify(jwtString);
+    if (verified.id === id) {
+      return await this.userService.getUser(id);
+    }
   }
 
   @Post('/create')
