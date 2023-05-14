@@ -35,6 +35,7 @@ const configModule = ConfigModule.forRoot({
         synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
         migrationsTableName: 'migrations',
         migrations: ['src/migration/*.ts'],
+        logging: process.env.DATABASE_LOGGING === 'true',
       }),
 
       dataSourceFactory: async (options) => {
