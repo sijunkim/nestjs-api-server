@@ -1,9 +1,9 @@
 import * as uuid from 'uuid';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { CreateUserDTO } from './dto/create-user.dto';
-import { UpdateUserDTO } from './dto/update-user.dto';
+import { CreateUserRequestDto } from './dto/create-user.dto';
+import { UpdateUserRequestDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { EmailService } from 'src/email/email.service';
 import { AuthService } from 'src/auth/auth.service';
@@ -32,37 +32,30 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  async createUser(createUserDTO: CreateUserDTO) {
-    const isExists = await this.checkUserExists(createUserDTO);
+  async createUser(dto: CreateUserRequestDto) {
+    const isExists = await this.checkUserExists(dto);
     if (isExists === false) {
       const signupVerifyToken = uuid.v1();
       const result = await this.emailService.sendMemberJoinVerification(
-        createUserDTO.email,
+        dto.email,
         signupVerifyToken,
       );
-      if (
-        result != null &&
-        result.accepted !== undefined &&
-        result.accepted.includes(createUserDTO.email)
-      ) {
+      if (result != null && result.accepted !== undefined && result.accepted.includes(dto.email)) {
         const user: User = new User();
-        user.id = createUserDTO.id;
-        user.name = createUserDTO.name;
-        user.email = createUserDTO.email;
-        user.password = createUserDTO.password;
+        user.id = dto.id;
+        user.name = dto.name;
+        user.email = dto.email;
+        user.password = dto.password;
         user.signupVerifyToken = signupVerifyToken;
 
         await this.saveUser(user);
-
-        return createUserDTO;
-      } else {
-        return 'fail';
       }
     }
   }
 
   async saveUser(user: User) {
-    await this.saveUserUsingQueryRunner(user);
+    // await this.saveUserUsingQueryRunner(user);
+    await this.saveUserUsingTransaction(user);
   }
 
   async saveUserUsingQueryRunner(user: User) {
@@ -73,9 +66,9 @@ export class UserService {
     try {
       await queryRunner.manager.save(user);
 
-      // throw new InternalServerErrorException(); // 일부러 에러를 발생시켜 본다
+      throw new InternalServerErrorException(); // 일부러 에러를 발생시켜 본다
 
-      await queryRunner.commitTransaction();
+      // await queryRunner.commitTransaction();
     } catch (e) {
       // 에러가 발생하면 롤백
       await queryRunner.rollbackTransaction();
@@ -86,16 +79,24 @@ export class UserService {
     }
   }
 
-  async putUser(updateUserDTO: UpdateUserDTO) {
-    const user = await this.userRepository.findOneBy({ id: updateUserDTO.id });
+  async saveUserUsingTransaction(user: User) {
+    await this.dataSource.transaction(async (manager) => {
+      await manager.save(user);
+
+      // throw new InternalServerErrorException(); // 일부러 에러를 발생시켜 본다
+    });
+  }
+
+  async putUser(dto: UpdateUserRequestDto) {
+    const user = await this.userRepository.findOneBy({ id: dto.id });
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다');
     } else {
-      user.name = updateUserDTO.name;
-      user.email = updateUserDTO.email;
-      user.address = updateUserDTO.address;
-      user.age = updateUserDTO.age;
+      user.name = dto.name;
+      user.email = dto.email;
+      user.address = dto.address;
+      user.age = dto.age;
     }
 
     return await this.userRepository.save(user);
@@ -105,8 +106,8 @@ export class UserService {
     return await this.userRepository.delete({ id: id });
   }
 
-  async checkUserExists(createUserDTO: CreateUserDTO) {
-    const user = await this.userRepository.findOneBy({ email: createUserDTO.email });
+  async checkUserExists(dto: CreateUserRequestDto) {
+    const user = await this.userRepository.findOneBy({ email: dto.email });
     return user !== null;
   }
 
