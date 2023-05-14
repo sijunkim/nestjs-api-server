@@ -7,12 +7,16 @@ import { UpdateUserRequestDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { EmailService } from 'src/email/email.service';
 import { AuthService } from 'src/auth/auth.service';
+import { Photo } from 'src/photo/entities/photo.entity';
+import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Photo)
+    private photoRepository: Repository<Photo>,
     private emailService: EmailService,
     private authService: AuthService,
     private dataSource: DataSource,
@@ -29,7 +33,13 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      relations: {
+        photos: {
+          photoMetadata: true,
+        },
+      },
+    });
   }
 
   async createUser(dto: CreateUserRequestDto) {
@@ -41,21 +51,40 @@ export class UserService {
         signupVerifyToken,
       );
       if (result != null && result.accepted !== undefined && result.accepted.includes(dto.email)) {
-        const user: User = new User();
+        const photo = new Photo();
+        photo.name = 'Me and Bears';
+        photo.description = 'I am near polar bears';
+        photo.filename = 'photo-with-bears.jpg';
+        photo.views = 1;
+        photo.isPublished = true;
+
+        const photoMetadata = new PhotoMetadata();
+        photoMetadata.height = 640;
+        photoMetadata.width = 480;
+        photoMetadata.compressed = true;
+        photoMetadata.comment = 'cybershoot';
+        photoMetadata.orientation = 'portrait';
+
+        photo.photoMetadata = photoMetadata;
+
+        const user = new User();
         user.id = dto.id;
         user.name = dto.name;
         user.email = dto.email;
         user.password = dto.password;
         user.signupVerifyToken = signupVerifyToken;
+        user.photos = [photo];
 
         await this.saveUser(user);
+
+        return user;
       }
     }
   }
 
   async saveUser(user: User) {
     // await this.saveUserUsingQueryRunner(user);
-    await this.saveUserUsingTransaction(user);
+    return await this.saveUserUsingTransaction(user);
   }
 
   async saveUserUsingQueryRunner(user: User) {
@@ -81,7 +110,7 @@ export class UserService {
 
   async saveUserUsingTransaction(user: User) {
     await this.dataSource.transaction(async (manager) => {
-      await manager.save(user);
+      return await manager.save(user);
 
       // throw new InternalServerErrorException(); // 일부러 에러를 발생시켜 본다
     });
@@ -103,7 +132,7 @@ export class UserService {
   }
 
   async deleteUser(id: string) {
-    return await this.userRepository.delete({ id: id });
+    return await this.userRepository.delete({ id });
   }
 
   async checkUserExists(dto: CreateUserRequestDto) {

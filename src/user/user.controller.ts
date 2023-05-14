@@ -46,12 +46,13 @@ export class UserController {
   ): Promise<CreateUserResponseDto | HttpResponseDto> {
     let result: CreateUserResponseDto = {};
     try {
-      await this.userService.createUser(dto);
+      const data = await this.userService.createUser(dto);
+      result.user = data;
       result.status = HttpStatus.OK;
     } catch (error) {
-      result.status = HttpStatus.BAD_REQUEST;
       result.messages = error.messages;
       result.requestDto = dto;
+      result.status = HttpStatus.BAD_REQUEST;
     }
 
     return result;

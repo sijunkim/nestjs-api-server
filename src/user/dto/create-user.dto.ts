@@ -12,6 +12,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { HttpResponseDto } from 'src/common/dto/http-response.dto';
+import { User } from '../entities/user.entity';
 
 export class CreateUserRequestDto {
   @IsString()
@@ -48,4 +49,5 @@ export class CreateUserRequestDto {
 
 export class CreateUserResponseDto extends HttpResponseDto {
   requestDto?: CreateUserRequestDto;
+  user?: User;
 }
