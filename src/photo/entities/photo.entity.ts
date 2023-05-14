@@ -30,11 +30,10 @@ export class Photo {
   })
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.photos)
+  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: User;
 
-  @OneToOne((type) => PhotoMetadata, (metadata) => metadata.photo, {
-    cascade: true,
-  })
+  @OneToOne(() => PhotoMetadata, (metadata) => metadata.photo, { cascade: true })
   photoMetadata: PhotoMetadata;
 }

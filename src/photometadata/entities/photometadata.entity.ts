@@ -27,7 +27,7 @@ export class PhotoMetadata {
   })
   createdAt: Date;
 
-  @OneToOne((type) => Photo, (photo) => photo.photoMetadata)
+  @OneToOne(() => Photo, (photo) => photo.photoMetadata, { onDelete: 'CASCADE' })
   @JoinColumn()
   photo: Photo;
 }
