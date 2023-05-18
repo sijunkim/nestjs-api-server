@@ -4,21 +4,16 @@ import { ErrorType } from '../enum/error-type.enum';
 
 export class HttpResponseDto {
   @ApiProperty({ description: '상태 코드' })
-  status?: number;
+  status?: HttpStatus;
 
   @ApiProperty({ description: '에러코드' })
   code?: number | ErrorType;
 
   @ApiProperty({ description: '에러 메세지' })
-  messages?: string[];
+  messages?: string;
 
-  constructor(
-    status: number = HttpStatus.OK,
-    code: number = ErrorType.NO_ERROR,
-    messages: string[] = [],
-  ) {
+  constructor(status: number = HttpStatus.OK, code: number = ErrorType.NO_ERROR) {
     this.status = status;
     this.code = code;
-    this.messages = messages;
   }
 }

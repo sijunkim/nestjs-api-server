@@ -1,5 +1,11 @@
 import * as uuid from 'uuid';
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserRequestDto } from './dto/create-user.dto';
@@ -9,6 +15,9 @@ import { EmailService } from 'src/email/email.service';
 import { AuthService } from 'src/auth/auth.service';
 import { Photo } from 'src/photo/entities/photo.entity';
 import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
+import { ReadUserResponseDto } from './dto/read-user.dto';
+import { HttpResponseDto } from 'src/common/dto/http-response.dto';
+import { ErrorType } from 'src/common/enum/error-type.enum';
 
 @Injectable()
 export class UserService {
@@ -22,8 +31,9 @@ export class UserService {
     private dataSource: DataSource,
   ) {}
 
-  async getUser(id: string) {
-    const user = await this.userRepository.find({
+  async getUser(id: string): Promise<ReadUserResponseDto | HttpResponseDto> {
+    const dto: ReadUserResponseDto = {};
+    const users = await this.userRepository.find({
       select: {
         id: true,
         photos: {
@@ -33,9 +43,13 @@ export class UserService {
         },
       },
       where: {
-        photos: {
-          id: 9,
-        },
+        id,
+        // photos: {
+        //   id: 10,
+        //   photoMetadata: {
+        //     id: 5,
+        //   },
+        // },
       },
       relations: {
         photos: {
@@ -44,11 +58,14 @@ export class UserService {
       },
     });
 
-    if (!user) {
-      throw new NotFoundException('유저가 존재하지 않습니다');
+    if (!users) {
+      dto.code = ErrorType.USER_NOT_FOUND_ERROR;
+      dto.messages = '유저가 존재하지 않습니다';
+    } else {
+      dto.users = users;
     }
 
-    return user;
+    return dto;
   }
 
   async findAll() {

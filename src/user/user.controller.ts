@@ -20,6 +20,7 @@ import { CreateUserRequestDto, CreateUserResponseDto } from './dto/create-user.d
 import { UpdateUserRequestDto } from './dto/update-user.dto';
 import { EmailVerifyRequestDto } from './dto/email-verify.dto';
 import { UserLoginRequestDto } from './dto/user-login.dto';
+import { ReadUserResponseDto } from './dto/read-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -34,7 +35,10 @@ export class UserController {
   }
 
   @Get('/:id')
-  async getUser(@Headers() headers: any, @Param('id') id: string) {
+  async getUser(
+    @Headers() headers: any,
+    @Param('id') id: string,
+  ): Promise<ReadUserResponseDto | HttpResponseDto> {
     const jwtString = headers.authorization.split('Bearer ')[1];
     const verified = this.authService.verify(jwtString);
     if (verified.id === id) {
