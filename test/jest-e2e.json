@@ -1,6 +1,21 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
+  "moduleNameMapper": {
+    "^@root/(.*)$": "<rootDir>/../src/$1",
+    "^@auth/(.*)$": "<rootDir>/../src/auth/$1",
+    "^@common/(.*)$": "<rootDir>/../src/common/$1",
+    "^@config/(.*)$": "<rootDir>/../src/config/$1",
+    "^@email/(.*)$": "<rootDir>/../src/email/$1",
+    "^@logger/(.*)$": "<rootDir>/../src/logger/$1",
+    "^@photo/(.*)$": "<rootDir>/../src/photo/$1",
+    "^@photometadata/(.*)$": "<rootDir>/../src/photometadata/$1",
+    "^@user/(.*)$": "<rootDir>/../src/user/$1"
+  },
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {

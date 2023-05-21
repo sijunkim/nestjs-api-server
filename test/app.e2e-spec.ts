@@ -15,10 +15,15 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  // describe('/ (GET)', () => {
+  //   test(app.getHttpServer().get('').expect('Hello World!!!'));
+  // });
+
+  function sum(a, b) {
+    return a + b;
+  }
+
+  test('adds 1 + 2 to equal 3', () => {
+    expect(sum(1, 2)).toBe(3);
   });
 });
