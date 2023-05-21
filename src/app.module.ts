@@ -3,12 +3,12 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import emailConfig from 'src/config/emailConfig';
+import emailConfig from '@config/emailConfig';
 import authConfig from './config/authConfig';
-import { validationSchema } from 'src/config/validationSchema';
+import { validationSchema } from '@config/validationSchema';
 import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './app.guard';
 import { PhotoModule } from './photo/photo.module';

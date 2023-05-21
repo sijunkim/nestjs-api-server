@@ -14,7 +14,7 @@ import {
 import { UserService } from './user.service';
 
 // import { DeleteResult } from 'typeorm';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '@auth/auth.service';
 import { HttpResponseDto } from 'src/common/dto/http-response.dto';
 import { CreateUserRequestDto, CreateUserResponseDto } from './dto/create-user.dto';
 import { UpdateUserRequestDto } from './dto/update-user.dto';
@@ -35,14 +35,12 @@ export class UserController {
   }
 
   @Get('/:id')
-  async getUser(
-    @Headers() headers: any,
-    @Param('id') id: string,
-  ): Promise<ReadUserResponseDto | HttpResponseDto> {
+  async getUser(@Headers() headers: any, @Param('id') id: string): Promise<ReadUserResponseDto> {
     const jwtString = headers.authorization.split('Bearer ')[1];
     const verified = this.authService.verify(jwtString);
     if (verified.id === id) {
-      return await this.userService.getUser(id);
+      const dto = await this.userService.getUser(id);
+      return dto;
     }
   }
 

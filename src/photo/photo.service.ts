@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRequestPhotoDto } from './dto/create-photo.dto';
 import { Photo } from './entities/photo.entity';
-import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
+import { PhotoMetadata } from '@photometadata/entities/photometadata.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 

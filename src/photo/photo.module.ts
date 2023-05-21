@@ -3,7 +3,7 @@ import { PhotoService } from './photo.service';
 import { PhotoController } from './photo.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Photo } from './entities/photo.entity';
-import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
+import { PhotoMetadata } from '@photometadata/entities/photometadata.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Photo, PhotoMetadata])],

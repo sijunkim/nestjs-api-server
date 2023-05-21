@@ -11,7 +11,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { HttpResponseDto } from 'src/common/dto/http-response.dto';
+import { HttpResponseDto } from '@common/dto/http-response.dto';
 import { User } from '../entities/user.entity';
 
 export class CreateUserRequestDto {

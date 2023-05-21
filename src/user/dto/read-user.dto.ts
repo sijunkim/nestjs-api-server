@@ -3,4 +3,5 @@ import { User } from '../entities/user.entity';
 
 export class ReadUserResponseDto extends HttpResponseDto {
   users?: User[];
+  user?: User;
 }

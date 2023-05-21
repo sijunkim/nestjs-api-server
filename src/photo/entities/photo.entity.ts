@@ -1,5 +1,5 @@
-import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
-import { User } from 'src/user/entities/user.entity';
+import { PhotoMetadata } from '@photometadata/entities/photometadata.entity';
+import { User } from '@user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()

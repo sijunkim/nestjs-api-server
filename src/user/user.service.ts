@@ -10,14 +10,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserRequestDto } from './dto/create-user.dto';
 import { UpdateUserRequestDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-import { EmailService } from 'src/email/email.service';
-import { AuthService } from 'src/auth/auth.service';
-import { Photo } from 'src/photo/entities/photo.entity';
-import { PhotoMetadata } from 'src/photometadata/entities/photometadata.entity';
+import { User } from '@user/entities/user.entity';
+import { EmailService } from '@email/email.service';
+import { AuthService } from '@auth/auth.service';
+import { Photo } from '@photo/entities/photo.entity';
+import { PhotoMetadata } from '@photometadata/entities/photometadata.entity';
 import { ReadUserResponseDto } from './dto/read-user.dto';
-import { HttpResponseDto } from 'src/common/dto/http-response.dto';
-import { ErrorType } from 'src/common/enum/error-type.enum';
+// import { HttpResponseDto } from '../common/dto/http-response.dto';
+import { ErrorType } from '@common/enum/error-type.enum';
 
 @Injectable()
 export class UserService {
@@ -31,9 +31,9 @@ export class UserService {
     private dataSource: DataSource,
   ) {}
 
-  async getUser(id: string): Promise<ReadUserResponseDto | HttpResponseDto> {
+  async getUser(id: string): Promise<ReadUserResponseDto> {
     const dto: ReadUserResponseDto = {};
-    const users = await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       select: {
         id: true,
         photos: {
@@ -58,11 +58,11 @@ export class UserService {
       },
     });
 
-    if (!users) {
+    if (!user) {
       dto.code = ErrorType.USER_NOT_FOUND_ERROR;
       dto.messages = '유저가 존재하지 않습니다';
     } else {
-      dto.users = users;
+      dto.user = user;
     }
 
     return dto;

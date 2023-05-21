@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PhotoService } from './photo.service';
-import { CreateRequestPhotoDto } from 'src/photo/dto/create-photo.dto';
+import { CreateRequestPhotoDto } from '@photo/dto/create-photo.dto';
 import { Photo } from './entities/photo.entity';
 
 @Controller('photo')

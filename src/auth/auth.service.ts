@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import authConfig from 'src/config/authConfig';
+import authConfig from '@config/authConfig';
 import { ConfigType } from '@nestjs/config';
 import { UserService } from 'src/user/user.service';
 
