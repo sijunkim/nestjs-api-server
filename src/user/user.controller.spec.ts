@@ -13,6 +13,7 @@ import { DataSource } from 'typeorm';
 import emailConfig from '../config/emailConfig';
 import authConfig from '../config/authConfig';
 import { validationSchema } from '../config/validationSchema';
+import { UserLoginRequestDto } from './dto/user-login.dto';
 
 describe('user controller', () => {
   let userController: UserController;
@@ -56,15 +57,16 @@ describe('user controller', () => {
   });
 
   describe('user controller', () => {
-    test('/:id', async () => {
+    test('get bearer and login', async () => {
+      const dto: UserLoginRequestDto = {
+        id: 'kimsijun',
+        password: 'temptemp',
+      };
+      const bearer = await userController.login(dto);
       const header = {
-        authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImtpbXNpanVuIiwibmFtZSI6Iuq5gOyLnOykgCIsImVtYWlsIjoicGFwYXlhOTM0OUBuYXZlci5jb20iLCJpYXQiOjE2ODM5OTc1NTIsImV4cCI6MTY4NjU4OTU1MiwiYXVkIjoiZXhhbXBsZS5jb20iLCJpc3MiOiJleGFtcGxlLmNvbSJ9.rCZinpd7K9T1TP5xlfe1HM3ZYxsZwpDB-4T9Qcqab_Q',
-        'user-agent': 'PostmanRuntime/7.32.2',
+        authorization: `Bearer ${bearer}`,
         accept: '*/*',
-        'postman-token': '95b9a5ad-4c6d-478f-a955-825cd338bc86',
         host: 'localhost:3000',
-        'accept-encoding': 'gzip, deflate, br',
         connection: 'keep-alive',
       };
       const result = await userController.getUser(header, 'kimsijun');
