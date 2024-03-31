@@ -19,9 +19,14 @@ export class ConfigService {
   }
 
   getTypeOrmConfig(): TypeOrmModuleOptions {
-    return {
-      type: 'mariadb',
+    console.log(this.getValue('DATABASE_HOST'));
+    console.log(this.getValue('DATABASE_PORT'));
+    console.log(this.getValue('DATABASE_USERNAME'));
+    console.log(this.getValue('DATABASE_PASSWORD'));
+    console.log(this.getValue('DATABASE_NAME'));
 
+    return {
+      type: 'mysql',
       host: this.getValue('DATABASE_HOST'),
       port: parseInt(this.getValue('DATABASE_PORT')),
       username: this.getValue('DATABASE_USERNAME'),
