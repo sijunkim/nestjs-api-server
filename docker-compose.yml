@@ -1,3 +1,5 @@
+# debug, dockerize 구분한 환경변수 읽도록 구조 변경해야 함
+
 version: '3.7'
 services:
   backend:
