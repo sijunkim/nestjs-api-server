@@ -1,4 +1,4 @@
-FROM node:16 AS builder
+FROM node:20-alpine3.19 AS builder
 WORKDIR /app
 
 COPY . .
@@ -6,9 +6,9 @@ COPY . .
 RUN yarn install
 RUN yarn build
 
-FROM node:16-alpine
+FROM node:20-alpine3.19
 WORKDIR /app
 
 COPY --from=builder /app ./
 
-CMD ["yarn", "start"]
+CMD ["yarn", "start:dev"]
