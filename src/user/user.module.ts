@@ -8,9 +8,14 @@ import { AuthService } from '@auth/auth.service';
 import { Photo } from '@photo/entities/photo.entity';
 import { PhotoMetadata } from '@photometadata/entities/photometadata.entity';
 import { PhotoService } from '@photo/photo.service';
+import { TypeOrmExModule } from '@config/typeorm/typeorm-ex.module';
+import { UserRepository } from './user.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Photo, PhotoMetadata])],
+  imports: [
+    TypeOrmModule.forFeature([User, Photo, PhotoMetadata]),
+    TypeOrmExModule.forCustomRepository([UserRepository]),
+  ],
   controllers: [UserController],
   providers: [UserService, EmailService, AuthService, PhotoService],
 })

@@ -1,16 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Headers,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 
 // import { DeleteResult } from 'typeorm';
@@ -44,10 +32,20 @@ export class UserController {
     }
   }
 
+  @Get('/name/:name')
+  async getUsersByName(@Headers() headers: any, @Param('name') name: string): Promise<ReadUserResponseDto> {
+    const jwtString = headers.authorization.split('Bearer ')[1];
+    const verified = this.authService.verify(jwtString);
+    if (verified.name === name) {
+      const dto = await this.userService.getUsersByName(name);
+      return dto;
+    }
+  }
+
+  findByName;
+
   @Post('/create')
-  async createUser(
-    @Body() dto: CreateUserRequestDto,
-  ): Promise<CreateUserResponseDto | HttpResponseDto> {
+  async createUser(@Body() dto: CreateUserRequestDto): Promise<CreateUserResponseDto | HttpResponseDto> {
     let result: CreateUserResponseDto = {};
     try {
       const data = await this.userService.createUser(dto);

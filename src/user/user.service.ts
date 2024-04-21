@@ -1,11 +1,5 @@
 import * as uuid from 'uuid';
-import {
-  HttpCode,
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpCode, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserRequestDto } from './dto/create-user.dto';
@@ -18,12 +12,12 @@ import { PhotoMetadata } from '@photometadata/entities/photometadata.entity';
 import { ReadUserResponseDto } from './dto/read-user.dto';
 // import { HttpResponseDto } from '../common/dto/http-response.dto';
 import { ErrorType } from '@common/enum/error-type.enum';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: UserRepository,
     @InjectRepository(Photo)
     private photoRepository: Repository<Photo>,
     private emailService: EmailService,
@@ -39,7 +33,11 @@ export class UserService {
         photos: {
           name: true,
           description: true,
-          photoMetadata: {},
+          photoMetadata: {
+            id: true,
+            orientation: true,
+            compressed: true,
+          },
         },
       },
       where: {
@@ -82,10 +80,7 @@ export class UserService {
     const isExists = await this.checkUserExists(dto);
     if (isExists === false) {
       const signupVerifyToken = uuid.v1();
-      const result = await this.emailService.sendMemberJoinVerification(
-        dto.email,
-        signupVerifyToken,
-      );
+      const result = await this.emailService.sendMemberJoinVerification(dto.email, signupVerifyToken);
       if (result != null && result.accepted !== undefined && result.accepted.includes(dto.email)) {
         const photo = new Photo();
         photo.name = 'Me and Bears';
@@ -202,5 +197,19 @@ export class UserService {
       name: user.name,
       email: user.email,
     });
+  }
+
+  async getUsersByName(name: string) {
+    const dto: ReadUserResponseDto = {};
+    const users = await this.userRepository.findByName(name);
+
+    if (!users) {
+      dto.code = ErrorType.USER_NOT_FOUND_ERROR;
+      dto.messages = '유저가 존재하지 않습니다';
+    } else {
+      dto.users = users;
+    }
+
+    return dto;
   }
 }
