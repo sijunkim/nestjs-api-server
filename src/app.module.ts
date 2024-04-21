@@ -40,6 +40,9 @@ const configModule = ConfigModule.forRoot({
 
       dataSourceFactory: async (options) => {
         const dataSource = await new DataSource(options).initialize();
+
+        dataSource.options.driver;
+
         return dataSource;
       },
     }),
@@ -59,7 +62,18 @@ const configModule = ConfigModule.forRoot({
   ],
 })
 export class AppModule implements NestModule {
+  constructor(private readonly dataSource: DataSource) {
+    this.connectionCustomize();
+  }
+
   configure(consumer: MiddlewareConsumer): any {
     consumer.apply(LoggerMiddleware).forRoutes('/user');
+  }
+
+  async connectionCustomize() {
+    const pool = (this.dataSource.driver as any).pool;
+    pool.on('connection', function (connection) {
+      // connection.query('SELECT 1');
+    });
   }
 }
