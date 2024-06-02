@@ -32,4 +32,11 @@ export class User {
 
   @OneToMany(() => Photo, (photo) => photo.user, { cascade: true })
   photos: Photo[];
+
+  static of(params: Partial<User>): User {
+    const user = new User();
+    Object.assign(user, params);
+
+    return user;
+  }
 }
