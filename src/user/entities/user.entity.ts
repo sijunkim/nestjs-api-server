@@ -1,5 +1,5 @@
 import { Column, Entity, IsNull, OneToMany, PrimaryColumn } from 'typeorm';
-import { Photo } from 'src/photo/entities/photo.entity';
+import { Photo } from '@photo/entities/photo.entity';
 
 @Entity()
 export class User {
@@ -24,6 +24,19 @@ export class User {
   @Column({ default: 0 })
   age?: number;
 
-  @OneToMany(() => Photo, (photo) => photo.user)
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @OneToMany(() => Photo, (photo) => photo.user, { cascade: true })
   photos: Photo[];
+
+  static of(params: Partial<User>): User {
+    const user = new User();
+    Object.assign(user, params);
+
+    return user;
+  }
 }

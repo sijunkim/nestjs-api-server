@@ -11,8 +11,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { HttpResponseDto } from '@common/dto/http-response.dto';
+import { User } from '../entities/user.entity';
 
-export class CreateUserDTO {
+export class CreateUserRequestDto {
   @IsString()
   @IsNotEmpty()
   id: string;
@@ -43,4 +45,9 @@ export class CreateUserDTO {
 
   @IsNumber()
   age: number;
+}
+
+export class CreateUserResponseDto extends HttpResponseDto {
+  requestDto?: CreateUserRequestDto;
+  user?: User;
 }

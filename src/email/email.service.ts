@@ -1,6 +1,6 @@
 import { ConfigType } from '@nestjs/config';
 import { Inject, Injectable } from '@nestjs/common';
-import EMAILCONFIG from 'src/config/emailConfig';
+import EMAILCONFIG from '@config/emailConfig';
 import Mail = require('nodemailer/lib/mailer');
 import * as nodemailer from 'nodemailer';
 import { Email, EmailOptions } from './entities/email.entity';

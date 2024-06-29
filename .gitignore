@@ -48,4 +48,5 @@ lerna-debug.log*
 ormconfig.json
 
 # database
+db/
 /db

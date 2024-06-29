@@ -1,21 +1,21 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LoggerMiddleware } from './logger/logger.middleware';
 
-import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import emailConfig from 'src/config/emailConfig';
+import emailConfig from '@config/emailConfig';
 import authConfig from './config/authConfig';
-import { validationSchema } from 'src/config/validationSchema';
+import { validationSchema } from '@config/validationSchema';
 import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './app.guard';
 import { PhotoModule } from './photo/photo.module';
+import { PhotometadataModule } from './photometadata/photometadata.module';
+import { DataSource } from 'typeorm';
 
 const configModule = ConfigModule.forRoot({
-  envFilePath: `.env`,
   load: [emailConfig, authConfig],
   isGlobal: true,
   validationSchema,
@@ -23,14 +23,37 @@ const configModule = ConfigModule.forRoot({
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'mysql',
+        host: process.env.DATABASE_HOST,
+        port: 3306,
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
+        migrationsTableName: 'migrations',
+        migrations: ['src/migration/*.ts'],
+        logging: process.env.DATABASE_LOGGING === 'true',
+      }),
+
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options).initialize();
+
+        dataSource.options.driver;
+
+        return dataSource;
+      },
+    }),
     configModule,
     UserModule,
-    EmailModule,
     AuthModule,
+    EmailModule,
     PhotoModule,
+    PhotometadataModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
     {
       provide: APP_GUARD,
@@ -39,7 +62,18 @@ const configModule = ConfigModule.forRoot({
   ],
 })
 export class AppModule implements NestModule {
+  constructor(private readonly dataSource: DataSource) {
+    this.connectionCustomize();
+  }
+
   configure(consumer: MiddlewareConsumer): any {
-    //consumer.apply(LoggerMiddleware).forRoutes('/user');
+    consumer.apply(LoggerMiddleware).forRoutes('/user');
+  }
+
+  async connectionCustomize() {
+    const pool = (this.dataSource.driver as any).pool;
+    pool.on('connection', function (connection) {
+      // connection.query('SELECT 1');
+    });
   }
 }
