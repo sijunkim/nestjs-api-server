@@ -10,6 +10,7 @@
       "@logger/*": ["./src/logger/*"],
       "@photo/*": ["./src/photo/*"],
       "@photometadata/*": ["./src/photometadata/*"],
+      "@dummy/*": ["./src/dummy/*"],
       "@user/*": ["./src/user/*"]
     }
   }

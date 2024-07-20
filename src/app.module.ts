@@ -14,6 +14,7 @@ import { AuthGuard } from './app.guard';
 import { PhotoModule } from './photo/photo.module';
 import { PhotometadataModule } from './photometadata/photometadata.module';
 import { DataSource } from 'typeorm';
+import { DummyModule } from './dummy/dummy.module';
 
 const configModule = ConfigModule.forRoot({
   load: [emailConfig, authConfig],
@@ -36,6 +37,7 @@ const configModule = ConfigModule.forRoot({
         migrationsTableName: 'migrations',
         migrations: ['src/migration/*.ts'],
         logging: process.env.DATABASE_LOGGING === 'true',
+        timezone: 'Asia/Seoul',
       }),
 
       dataSourceFactory: async (options) => {
@@ -52,6 +54,7 @@ const configModule = ConfigModule.forRoot({
     EmailModule,
     PhotoModule,
     PhotometadataModule,
+    DummyModule,
   ],
   controllers: [],
   providers: [
