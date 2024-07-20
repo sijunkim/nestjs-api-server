@@ -14,7 +14,8 @@
     "^@logger/(.*)$": "<rootDir>/../src/logger/$1",
     "^@photo/(.*)$": "<rootDir>/../src/photo/$1",
     "^@photometadata/(.*)$": "<rootDir>/../src/photometadata/$1",
-    "^@user/(.*)$": "<rootDir>/../src/user/$1"
+    "^@user/(.*)$": "<rootDir>/../src/user/$1",
+    "^@dummy/(.*)$": "<rootDir>/../src/dummy/$1"
   },
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",

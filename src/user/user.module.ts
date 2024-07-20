@@ -17,6 +17,6 @@ import { UserRepository } from './user.repository';
     TypeOrmExModule.forCustomRepository([UserRepository]),
   ],
   controllers: [UserController],
-  providers: [UserService, EmailService, AuthService, PhotoService],
+  providers: [UserService, EmailService, AuthService, PhotoService, UserRepository],
 })
 export class UserModule {}
